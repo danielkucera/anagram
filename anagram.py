@@ -10,6 +10,15 @@ c = conn.cursor()
 
 words = {}
 
+def load_char_values(filename):
+    ch_vals = {}
+    f = open(filename, "r", encoding="utf-8")
+    for line in f:
+        ch = line[0].upper()
+        val = line[1:]
+        ch_vals[ch] = int(val)
+    return ch_vals
+
 def get_comb_count(n):
     count = 0
     last = 1
@@ -23,7 +32,10 @@ def get_dict_len():
     return c.fetchone()[0]
 
 def eval_word(word):
-    return len(word)
+    val = 0
+    for ch in word:
+        val += char_values[ch]
+    return val
 
 def add_word(word):
     words[word] = eval_word(word)
@@ -57,6 +69,7 @@ def check_dict(input_set):
         if match_word(input_set[:], word):
             add_word(word)
 
+char_values = load_char_values("charvalues.txt")
 comb_count = get_comb_count(len(input_set))
 dict_len = get_dict_len()
 print("possilbe combinations:", comb_count, "dictionary size:", dict_len)
