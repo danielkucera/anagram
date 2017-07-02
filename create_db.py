@@ -15,8 +15,9 @@ except:
     pass
 
 for line in f:
-    print("line",line[:-1])
-    c.execute("INSERT INTO words VALUES(?)", (line.rstrip(),))
+    word = line.rstrip().upper()
+    print("line",word)
+    c.execute("INSERT INTO words VALUES(?)", (word,))
 
 conn.commit()
 conn.close()
