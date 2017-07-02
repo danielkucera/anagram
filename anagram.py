@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 import sqlite3
@@ -21,7 +21,7 @@ def get_dict_len():
     return c.fetchone()[0]
 
 def eval_word(word):
-    print word
+    print(word)
 
 def check_word(word):
     c.execute("SELECT * FROM words WHERE word = ?", (word,))
@@ -54,7 +54,7 @@ def check_dict(input_set):
 
 comb_count = get_comb_count(len(input_set))
 dict_len = get_dict_len()
-print "possilbe combinations:", comb_count, "dictionary size:", dict_len
+print("possilbe combinations:", comb_count, "dictionary size:", dict_len)
 
 if comb_count < dict_len:
     check_combinations("",input_set)
