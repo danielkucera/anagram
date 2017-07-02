@@ -3,10 +3,12 @@
 import sys
 import sqlite3
 
-input_set = sys.argv[1:]
+input_set = [x.upper() for x in sys.argv[1:]]
 
 conn = sqlite3.connect("wordlist.db")
 c = conn.cursor()
+
+words = {}
 
 def get_comb_count(n):
     count = 0
@@ -21,12 +23,15 @@ def get_dict_len():
     return c.fetchone()[0]
 
 def eval_word(word):
-    print(word)
+    return len(word)
+
+def add_word(word):
+    words[word] = eval_word(word)
 
 def check_word(word):
     c.execute("SELECT * FROM words WHERE word = ?", (word,))
     if c.fetchone() != None:
-        eval_word(word)
+        add_word(word)
 
 def check_combinations(prefix, char_set):
     for char in char_set:
@@ -50,7 +55,7 @@ def check_dict(input_set):
     for row in c.execute("SELECT * FROM words WHERE length(word) < ?", (len(input_set),)): #where len < dict_len
         word = row[0]
         if match_word(input_set[:], word):
-            eval_word(word)
+            add_word(word)
 
 comb_count = get_comb_count(len(input_set))
 dict_len = get_dict_len()
@@ -60,4 +65,9 @@ if comb_count < dict_len:
     check_combinations("",input_set)
 else:
     check_dict(input_set)
+
+sorted_words = sorted(words.items(), key=lambda word: word[1])
+
+for word in sorted_words:
+    print(word)
 
